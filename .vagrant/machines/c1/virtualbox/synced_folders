@@ -1,0 +1,1 @@
+{"rsync":{"/vagrant":{"type":"rsync","guestpath":"/vagrant","hostpath":"C:/Users/u6040124/repos/virtualbox-k8s","disabled":false,"__vagrantfile":true,"owner":"vagrant","group":"vagrant"}}}
