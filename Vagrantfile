@@ -35,6 +35,11 @@ Vagrant.configure("2") do |config|
 
   end
 
+  # Create a forwarded port mapping which allows access to a specific port
+  # within the machine from a port on the host machine and only allow access
+  # via 127.0.0.1 to disable public access
+  config.vm.network "forwarded_port", guest: 80, host: 8080, host_ip: "127.0.0.1"
+
   # Avoid updating the guest additions if the user has the plugin installed:
   if Vagrant.has_plugin?("vagrant-vbguest")
     config.vbguest.auto_update = false
@@ -48,14 +53,28 @@ Vagrant.configure("2") do |config|
     script.path = "./scripts/slate-cli/install.sh"
   end
   config.vm.provision "shell" do |script|
-      script.env = { SLATE_ENV:ENV['SLATE_ENV'] }
-      script.path = "./scripts/slate-cli/access.sh"
-    end
+    script.env = { SLATE_ENV:ENV['SLATE_ENV'] }
+    script.path = "./scripts/slate-cli/access.sh"
+  end
+  config.vm.provision "shell" do |script|
+    script.env = {  }
+    script.path = "./scripts/cluster/os-requirements.sh"
+  end
+  config.vm.provision "shell" do |script|
+    script.env = {  }
+    script.path = "./scripts/cluster/docker.sh"
+  end
+  config.vm.provision "shell" do |script|
+    script.env = {  }
+    script.path = "./scripts/cluster/kubernetes.sh"
+  end
+  config.vm.provision "shell" do |script|
+    script.env = {  }
+    script.path = "./scripts/cluster/master.sh"
+  end
 
-
-
-
-
+  # Display a note when running the machine.
+  config.vm.post_up_message = "Remember to switch to root (sudo su -)!"
 
 
 

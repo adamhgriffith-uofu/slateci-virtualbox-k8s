@@ -3,6 +3,10 @@
 # Enable strict mode:
 set -euo pipefail
 
+echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+echo "~ Install SLATE CLI                                                               ~"
+echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+
 cd /tmp
 echo "Downloading the SLATE command line interface..."
 curl -LO https://jenkins.slateci.io/artifacts/client/slate-linux.tar.gz
