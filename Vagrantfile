@@ -42,13 +42,13 @@ Vagrant.configure("2") do |config|
 
     master.vm.provider "virtualbox" do |vb|
       # Customize the number of CPUs on the VM:
-      vb.cpus = 2
+      vb.cpus = 4
 
       # Display the VirtualBox GUI when booting the machine:
       vb.gui = false
 
       # Customize the amount of memory on the VM:
-      vb.memory = 4096
+      vb.memory = 8192
 
       # Customize the name that appears in the VirtualBox GUI
       vb.name = "master"
@@ -80,13 +80,13 @@ Vagrant.configure("2") do |config|
 
       worker.vm.provider "virtualbox" do |vb|
         # Customize the number of CPUs on the VM:
-        vb.cpus = 1
+        vb.cpus = 2
 
         # Display the VirtualBox GUI when booting the machine:
         vb.gui = false
 
         # Customize the amount of memory on the VM:
-        vb.memory = 1024
+        vb.memory = 4096
 
         # Customize the name that appears in the VirtualBox GUI
         vb.name = "worker#{i}"
