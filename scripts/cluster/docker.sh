@@ -16,5 +16,19 @@ yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce
 echo "Installing the latest version of DockerCE and containerd..."
 yum install docker-ce docker-ce-cli containerd.io -y
 
+# Following configurations are recommended in the kubernetes documentation for Docker runtime. Please refer
+# to https://kubernetes.io/docs/setup/production-environment/container-runtimes/#docker
+mkdir /etc/docker
+cat <<EOF | sudo tee /etc/docker/daemon.json
+{
+  "exec-opts": ["native.cgroupdriver=systemd"],
+  "log-driver": "json-file",
+  "log-opts": {
+    "max-size": "100m"
+  },
+  "storage-driver": "overlay2"
+}
+EOF
+
 echo "Enabling Docker on reboot through systemctl..."
 systemctl enable --now docker
