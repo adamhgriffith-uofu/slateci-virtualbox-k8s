@@ -19,10 +19,8 @@ gpgkey=https://packages.cloud.google.com/yum/doc/yum-key.gpg https://packages.cl
 EOF
 
 echo "Installing kubeadm, kubectl, and kubelet..."
-yum install -y kubeadm kubectl kubelet --disableexcludes=kubernetes
+yum install -y kubeadm-1.21.* kubectl-1.21.* kubelet-1.21.* --disableexcludes=kubernetes
 
 echo "Enabling Kublet on reboot through systemctl..."
 systemctl enable --now kubelet
 
-echo "Stepping back to compatible kubeadm, kubectl, and kubelet versions..."
-yum install kubeadm-1.21.* kubectl-1.21.* kubelet-1.21.* --disableexcludes=kubernetes
