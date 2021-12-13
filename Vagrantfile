@@ -35,7 +35,7 @@ Vagrant.configure("2") do |config|
   ##############################################################
   # Create the master node.                                    #
   ##############################################################
-  config.vm.define "master" do |master|
+  config.vm.define "master", primary: true do |master|
     master.vm.box = "centos/7"
     master.vm.hostname = "master"
     master.vm.network "private_network", ip: "192.168.100.10", netmask: "255.255.255.0"
@@ -55,10 +55,10 @@ Vagrant.configure("2") do |config|
     end
 
     # Provision with shell scripts.
-    master.vm.provision "shell", path: "./scripts/slate-cli/install.sh"
+    master.vm.provision "shell", path: "./scripts/slate/cli/install.sh"
     master.vm.provision "shell" do |script|
       script.env = { SLATE_ENV:ENV['SLATE_ENV'] }
-      script.path = "./scripts/slate-cli/access.sh"
+      script.path = "./scripts/slate/cli/access.sh"
     end
     master.vm.provision "shell", path: "./scripts/cluster/os-requirements.sh"
     master.vm.provision "shell", path: "./scripts/cluster/docker.sh"
@@ -76,6 +76,7 @@ Vagrant.configure("2") do |config|
 
       worker.vm.box = "centos/7"
       worker.vm.hostname = "worker#{i}"
+      worker.vm.linked_clone = true
       worker.vm.network "private_network", ip: "192.168.100.1#{i}", netmask: "255.255.255.0"
 
       worker.vm.provider "virtualbox" do |vb|
