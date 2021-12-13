@@ -14,12 +14,30 @@ Vagrant.configure("2") do |config|
   # For a complete reference, please see the online documentation at
   # https://docs.vagrantup.com.
 
-  config.vm.define "c1" do |c1|
-    c1.vm.box = "centos/7"
-    c1.vm.hostname = "centos01"
-    c1.vm.network "public_network"
+  # Avoid updating the guest additions if the user has the plugin installed:
+  if Vagrant.has_plugin?("vagrant-vbguest")
+    config.vbguest.auto_update = false
+  end
 
-    c1.vm.provider "virtualbox" do |vb|
+  # Display a note when running the machine.
+  config.vm.post_up_message = "Remember to switch to root (sudo su -)!"
+
+  # Provision with shell scripts.
+  config.vm.provision "shell", inline: <<-SHELL
+    echo "192.168.1.10 master" >> /etc/hosts
+    echo "192.168.1.11 worker1" >> /etc/hosts
+    echo "192.168.1.12 worker2" >> /etc/hosts
+  SHELL
+
+  ##############################################################
+  # Create the master node.                                    #
+  ##############################################################
+  config.vm.define "master" do |master|
+    master.vm.box = "centos/7"
+    master.vm.hostname = "master"
+    master.vm.network "private_network", ip: "192.168.10.10"
+
+    master.vm.provider "virtualbox" do |vb|
       # Customize the number of CPUs on the VM:
       vb.cpus = 2
 
@@ -30,51 +48,62 @@ Vagrant.configure("2") do |config|
       vb.memory = 4096
 
       # Customize the name that appears in the VirtualBox GUI
-      vb.name = "centos01"
+      vb.name = "master"
     end
 
+    # Provision with shell scripts.
+    master.vm.provision "shell", path: "./scripts/slate-cli/install.sh"
+    master.vm.provision "shell" do |script|
+      script.env = { SLATE_ENV:ENV['SLATE_ENV'] }
+      script.path = "./scripts/slate-cli/access.sh"
+    end
+    master.vm.provision "shell", path: "./scripts/cluster/os-requirements.sh"
+    master.vm.provision "shell", path: "./scripts/cluster/docker.sh"
+    master.vm.provision "shell", path: "./scripts/cluster/kubernetes.sh"
+    master.vm.provision "shell", path: "./scripts/cluster/master.sh"
+
   end
+
+  ##############################################################
+  # Create the worker nodes.                                   #
+  ##############################################################
+#   (1..2).each do |i|
+#
+#     config.vm.define "worker#{i}" do |worker|
+#
+#       worker.vm.box = "centos/7"
+#       worker.vm.hostname = "worker#{i}"
+#       worker.vm.network "private_network", ip: "192.168.10.1#{i}]"
+#
+#       worker.vm.provider "virtualbox" do |vb|
+#         # Customize the number of CPUs on the VM:
+#         vb.cpus = 1
+#
+#         # Display the VirtualBox GUI when booting the machine:
+#         vb.gui = false
+#
+#         # Customize the amount of memory on the VM:
+#         vb.memory = 1024
+#
+#         # Customize the name that appears in the VirtualBox GUI
+#         vb.name = "worker#{i}"
+#       end
+#
+#       # Provision with shell scripts.
+#       worker.vm.provision "shell", path: "./scripts/cluster/os-requirements.sh"
+#       worker.vm.provision "shell", path: "./scripts/cluster/docker.sh"
+#       worker.vm.provision "shell", path: "./scripts/cluster/kubernetes.sh"
+#
+#     end
+#
+#   end
 
   # Create a forwarded port mapping which allows access to a specific port
   # within the machine from a port on the host machine and only allow access
   # via 127.0.0.1 to disable public access
-  config.vm.network "forwarded_port", guest: 80, host: 8080, host_ip: "127.0.0.1"
+#   config.vm.network "forwarded_port", guest: 80, host: 8080, host_ip: "127.0.0.1"
 
-  # Avoid updating the guest additions if the user has the plugin installed:
-  if Vagrant.has_plugin?("vagrant-vbguest")
-    config.vbguest.auto_update = false
-  end
 
-  # Enable provisioning with a shell script. Additional provisioners such as
-  # Ansible, Chef, Docker, Puppet and Salt are also available. Please see the
-  # documentation for more information about their specific syntax and use.
-  config.vm.provision "shell" do |script|
-    script.env = { }
-    script.path = "./scripts/slate-cli/install.sh"
-  end
-  config.vm.provision "shell" do |script|
-    script.env = { SLATE_ENV:ENV['SLATE_ENV'] }
-    script.path = "./scripts/slate-cli/access.sh"
-  end
-  config.vm.provision "shell" do |script|
-    script.env = {  }
-    script.path = "./scripts/cluster/os-requirements.sh"
-  end
-  config.vm.provision "shell" do |script|
-    script.env = {  }
-    script.path = "./scripts/cluster/docker.sh"
-  end
-  config.vm.provision "shell" do |script|
-    script.env = {  }
-    script.path = "./scripts/cluster/kubernetes.sh"
-  end
-  config.vm.provision "shell" do |script|
-    script.env = {  }
-    script.path = "./scripts/cluster/master.sh"
-  end
-
-  # Display a note when running the machine.
-  config.vm.post_up_message = "Remember to switch to root (sudo su -)!"
 
 
 
