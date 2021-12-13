@@ -21,7 +21,6 @@ slatepath="$HOME/.slate"
 mkdir -p -m 0700 ${slatepath}
 cp /vagrant/secrets/tokens/cli-access "${slatepath}/token"
 chmod 0600 "${slatepath}/token"
-chown vagrant:vagrant -R "${slatepath}"
 
 # Finally:
 echo "SLATE access token successfully stored!"
