@@ -22,11 +22,14 @@ Vagrant.configure("2") do |config|
   # Display a note when running the machine.
   config.vm.post_up_message = "Remember to switch to root (sudo su -)!"
 
+  # Share an additional folder to the guest VM.
+  # config.vm.synced_folder "./work", "/vagrant_work"
+
   # Provision with shell scripts.
   config.vm.provision "shell", inline: <<-SHELL
-    echo "192.168.1.10 master" >> /etc/hosts
-    echo "192.168.1.11 worker1" >> /etc/hosts
-    echo "192.168.1.12 worker2" >> /etc/hosts
+    echo "192.168.100 master" >> /etc/hosts
+    echo "192.168.101 worker1" >> /etc/hosts
+    echo "192.168.102 worker2" >> /etc/hosts
   SHELL
 
   ##############################################################
@@ -35,7 +38,7 @@ Vagrant.configure("2") do |config|
   config.vm.define "master" do |master|
     master.vm.box = "centos/7"
     master.vm.hostname = "master"
-    master.vm.network "private_network", ip: "192.168.10.10"
+    master.vm.network "private_network", ip: "192.168.100.10", netmask: "255.255.255.0"
 
     master.vm.provider "virtualbox" do |vb|
       # Customize the number of CPUs on the VM:
@@ -67,36 +70,36 @@ Vagrant.configure("2") do |config|
   ##############################################################
   # Create the worker nodes.                                   #
   ##############################################################
-#   (1..2).each do |i|
-#
-#     config.vm.define "worker#{i}" do |worker|
-#
-#       worker.vm.box = "centos/7"
-#       worker.vm.hostname = "worker#{i}"
-#       worker.vm.network "private_network", ip: "192.168.10.1#{i}]"
-#
-#       worker.vm.provider "virtualbox" do |vb|
-#         # Customize the number of CPUs on the VM:
-#         vb.cpus = 1
-#
-#         # Display the VirtualBox GUI when booting the machine:
-#         vb.gui = false
-#
-#         # Customize the amount of memory on the VM:
-#         vb.memory = 1024
-#
-#         # Customize the name that appears in the VirtualBox GUI
-#         vb.name = "worker#{i}"
-#       end
-#
-#       # Provision with shell scripts.
-#       worker.vm.provision "shell", path: "./scripts/cluster/os-requirements.sh"
-#       worker.vm.provision "shell", path: "./scripts/cluster/docker.sh"
-#       worker.vm.provision "shell", path: "./scripts/cluster/kubernetes.sh"
-#
-#     end
-#
-#   end
+  (1..2).each do |i|
+
+    config.vm.define "worker#{i}" do |worker|
+
+      worker.vm.box = "centos/7"
+      worker.vm.hostname = "worker#{i}"
+      worker.vm.network "private_network", ip: "192.168.100.1#{i}", netmask: "255.255.255.0"
+
+      worker.vm.provider "virtualbox" do |vb|
+        # Customize the number of CPUs on the VM:
+        vb.cpus = 1
+
+        # Display the VirtualBox GUI when booting the machine:
+        vb.gui = false
+
+        # Customize the amount of memory on the VM:
+        vb.memory = 1024
+
+        # Customize the name that appears in the VirtualBox GUI
+        vb.name = "worker#{i}"
+      end
+
+      # Provision with shell scripts.
+      worker.vm.provision "shell", path: "./scripts/cluster/os-requirements.sh"
+      worker.vm.provision "shell", path: "./scripts/cluster/docker.sh"
+      worker.vm.provision "shell", path: "./scripts/cluster/kubernetes.sh"
+
+    end
+
+  end
 
   # Create a forwarded port mapping which allows access to a specific port
   # within the machine from a port on the host machine and only allow access
