@@ -4,11 +4,11 @@
 set -euo pipefail
 
 echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
-echo "~ Configure SLATE Master Node                                                     ~"
+echo "~ Configure Kubernetes Master Node                                                ~"
 echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
 
 echo "Initializing the Kubernetes cluster with Kubeadm.."
-kubeadm init --pod-network-cidr=192.168.0.0/16
+kubeadm init --apiserver-advertise-address=192.168.100.10 --pod-network-cidr=192.168.0.0/16
 
 echo "Enabling kubectl access for root..."
 mkdir -p "$HOME/.kube"
