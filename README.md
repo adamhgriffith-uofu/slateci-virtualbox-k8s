@@ -67,6 +67,16 @@ and repeat for `worker2`.
 
 SSH into the `master` node and run the commands described in [SLATE: Cluster Federation](https://slateci.io/docs/cluster/manual/cluster-federation.html).
 
+## Teardown
+
+Tearing down the virtual machines is done with a single command:
+
+```shell
+vagrant destroy -f
+```
+
+See [Vagrant: Destroy](https://www.vagrantup.com/docs/cli/destroy) for additional information.
+
 ## References
 
 * [Playing with kubeadm in Vagrant Machines](https://medium.com/@joatmon08/playing-with-kubeadm-in-vagrant-machines-36598b5e8408)
