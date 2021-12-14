@@ -50,7 +50,7 @@ SSH into the `master` node and run:
 [root@master ~]# kubeadm token create --print-join-command
 ```
 
-With the output in hand ssh into execute the command in both workers.
+With the output in hand execute the command on both workers.
 
 ```shell
 vagrant ssh worker1
