@@ -19,7 +19,7 @@ echo "export SLATE_API_ENDPOINT=\"https://${conf_slate_api_hostname}:${conf_slat
 echo "Setting the SLATE access token..."
 slatepath="$HOME/.slate"
 mkdir -p -m 0700 ${slatepath}
-cp /vagrant/secrets/tokens/cli-access "${slatepath}/token"
+cp /vagrant/secrets/tokens/slate-cli "${slatepath}/token"
 chmod 0600 "${slatepath}/token"
 
 # Finally:
