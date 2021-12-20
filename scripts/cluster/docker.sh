@@ -30,5 +30,5 @@ cat <<EOF | sudo tee /etc/docker/daemon.json
 }
 EOF
 
-echo "Enabling Docker on reboot through systemctl..."
+echo "Enabling Docker through systemctl..."
 systemctl enable --now docker

@@ -21,6 +21,6 @@ EOF
 echo "Installing kubeadm, kubectl, and kubelet..."
 yum install -y kubeadm-1.21.* kubectl-1.21.* kubelet-1.21.* --disableexcludes=kubernetes
 
-echo "Enabling Kublet on reboot through systemctl..."
+echo "Enabling Kublet through systemctl..."
 systemctl enable --now kubelet
 
