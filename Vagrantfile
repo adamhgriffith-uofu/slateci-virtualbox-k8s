@@ -27,9 +27,9 @@ Vagrant.configure("2") do |config|
 
   # Provision with shell scripts.
   config.vm.provision "shell", inline: <<-SHELL
-    echo "192.168.100 master" >> /etc/hosts
-    echo "192.168.101 worker1" >> /etc/hosts
-    echo "192.168.102 worker2" >> /etc/hosts
+    echo "192.168.56.10 master" >> /etc/hosts
+    echo "192.168.56.11 worker1" >> /etc/hosts
+    echo "192.168.56.12 worker2" >> /etc/hosts
   SHELL
 
   ##############################################################
@@ -38,7 +38,7 @@ Vagrant.configure("2") do |config|
   config.vm.define "master" do |master|
     master.vm.box = "centos/7"
     master.vm.hostname = "master"
-    master.vm.network "private_network", ip: "192.168.100.10", netmask: "255.255.255.0"
+    master.vm.network "private_network", ip: "192.168.56.10", netmask: "255.255.255.0"
 
     master.vm.provider "virtualbox" do |vb|
       # Customize the number of CPUs on the VM:
@@ -76,7 +76,7 @@ Vagrant.configure("2") do |config|
 
       worker.vm.box = "centos/7"
       worker.vm.hostname = "worker#{i}"
-      worker.vm.network "private_network", ip: "192.168.100.1#{i}", netmask: "255.255.255.0"
+      worker.vm.network "private_network", ip: "192.168.56.1#{i}", netmask: "255.255.255.0"
 
       worker.vm.provider "virtualbox" do |vb|
         # Customize the number of CPUs on the VM:
