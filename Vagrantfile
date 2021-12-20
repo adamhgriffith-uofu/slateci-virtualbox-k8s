@@ -15,15 +15,18 @@ Vagrant.configure("2") do |config|
   # https://docs.vagrantup.com.
 
   # Avoid updating the guest additions if the user has the plugin installed:
-  if Vagrant.has_plugin?("vagrant-vbguest")
-    config.vbguest.auto_update = false
-  end
+#   if Vagrant.has_plugin?("vagrant-vbguest")
+#     config.vbguest.auto_update = false
+#   end
 
   # Display a note when running the machine.
   config.vm.post_up_message = "Remember to switch to root (sudo su -)!"
 
+  # Necessary for mounts (see https://www.puppeteers.net/blog/fixing-vagrant-vbguest-for-the-centos-7-base-box/).
+  config.vbguest.installer_options = { allow_kernel_upgrade: true }
+
   # Share an additional folder to the guest VM.
-  # config.vm.synced_folder "./work", "/vagrant_work"
+  config.vm.synced_folder "./work", "/vagrant_work", SharedFoldersEnableSymlinksCreate: false
 
   # Provision with shell scripts.
   config.vm.provision "shell", inline: <<-SHELL
@@ -96,6 +99,7 @@ Vagrant.configure("2") do |config|
       worker.vm.provision "shell", path: "./scripts/cluster/os-requirements.sh"
       worker.vm.provision "shell", path: "./scripts/cluster/docker.sh"
       worker.vm.provision "shell", path: "./scripts/cluster/kubernetes.sh"
+      worker.vm.provision "shell", path: "./scripts/cluster/worker.sh"
 
     end
 
