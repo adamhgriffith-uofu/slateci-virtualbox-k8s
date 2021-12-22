@@ -43,25 +43,11 @@ vagrant up
 
 ### Initialize K8s Cluster
 
-SSH into the `master` node and run:
+Initialization is done for you.
 
-```shell
-[vagrant@master ~]# sudo su-
-[root@master ~]# kubeadm token create --print-join-command
-```
-
-With the output in hand execute the command on both workers.
-
-```shell
-vagrant ssh worker1
-```
-
-```shell
-[vagrant@worker1 ~]# sudo su-
-[root@worker1 ~]# kubeadm join <master-ip>:6443 --token <token> --discovery-token-ca-cert-hash <hash>
-```
-
-and repeat for `worker2`.
+* The host directory `/<repo-location>/work` is mounted at `/vagrant_work` on each virtual machine.
+* When `master` is created it will create `/<repo-location>/work/join.sh`.
+* `/<repo-location>/work/join.sh` will be used by the workers to join the Kubernetes cluster automatically.
 
 ### SLATE Cluster Federation
 
@@ -69,7 +55,7 @@ SSH into the `master` node and run the commands described in [SLATE: Cluster Fed
 
 ## Teardown
 
-Tearing down the virtual machines is done with a single command:
+Tearing down the virtual machines and clearing the old `/<repo-location>/work/join.sh` is done with a single command:
 
 ```shell
 vagrant destroy -f

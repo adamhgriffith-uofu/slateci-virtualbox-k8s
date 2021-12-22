@@ -58,22 +58,10 @@ Vagrant.configure("2") do |config|
       vb.name = "master"
     end
 
-    # VirtualBox Provider
-    master.vm.provider "virtualbox" do |vb|
-      # Customize the number of CPUs on the VM:
-      vb.cpus = 4
-
-      # Customize the network drivers:
-      vb.default_nic_type = "virtio"
-
-      # Display the VirtualBox GUI when booting the machine:
-      vb.gui = false
-
-      # Customize the amount of memory on the VM:
-      vb.memory = 8192
-
-      # Customize the name that appears in the VirtualBox GUI:
-      vb.name = "master"
+    # Perform housekeeping on `vagrant destroy`.
+    master.trigger.before :destroy do |trigger|
+      trigger.warn = "Removing old /vagrant_work/join.sh..."
+      trigger.run_remote = {path: "./scripts/cluster/housekeeping.sh"}
     end
 
     # Provision with shell scripts.

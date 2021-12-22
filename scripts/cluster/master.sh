@@ -19,15 +19,10 @@ echo "Creating Pod network via Calico..."
 kubectl create -f https://docs.projectcalico.org/manifests/tigera-operator.yaml
 kubectl create -f https://docs.projectcalico.org/manifests/custom-resources.yaml
 
-if [ ! -f "/vagrant_work/join.sh" ]
-then
-  echo "Creating new cluster join script..."
-  touch /vagrant_work/join.sh
-  chmod +x /vagrant_work/join.sh
-  kubeadm token create --print-join-command > /vagrant_work/join.sh
-else
-  echo "Using existing cluster join script..."
-fi
+echo "Creating new cluster join script..."
+touch /vagrant_work/join.sh
+chmod +x /vagrant_work/join.sh
+kubeadm token create --print-join-command > /vagrant_work/join.sh
 
 echo "Creating load-balancing via MetalLB..."
 kubectl create -f https://raw.githubusercontent.com/metallb/metallb/v0.10.2/manifests/namespace.yaml
