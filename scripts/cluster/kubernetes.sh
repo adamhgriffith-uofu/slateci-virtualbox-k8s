@@ -8,15 +8,9 @@ echo "~ Install and configure Kubernetes                                        
 echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
 
 echo "Adding the Kubernetes repo to yum..."
-cat <<EOF > /etc/yum.repos.d/kubernetes.repo
-[kubernetes]
-name=Kubernetes
-baseurl=https://packages.cloud.google.com/yum/repos/kubernetes-el7-x86_64
-enabled=1
-gpgcheck=1
-repo_gpgcheck=1
-gpgkey=https://packages.cloud.google.com/yum/doc/yum-key.gpg https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
-EOF
+cd /etc/yum.repos.d
+cp /vagrant/resources/yum.repos.d/kubernetes.repo kubernetes.repo
+chown root:root kubernetes.repo
 
 echo "Installing kubeadm, kubectl, and kubelet..."
 yum install -y kubeadm-1.21.* kubectl-1.21.* kubelet-1.21.* --disableexcludes=kubernetes
