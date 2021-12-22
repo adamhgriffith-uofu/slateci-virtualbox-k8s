@@ -60,7 +60,7 @@ Vagrant.configure("2") do |config|
 
     # Perform housekeeping on `vagrant destroy`.
     master.trigger.before :destroy do |trigger|
-      trigger.warn = "Removing old /vagrant_work/join.sh..."
+      trigger.warn = "Performing housekeeping before starting destroy..."
       trigger.run_remote = {path: "./scripts/cluster/housekeeping.sh"}
     end
 
