@@ -6,6 +6,10 @@ Tools to create K8s with VirtualBox via HashiCorp Vagrant and register with SLAT
 
 ## Requirements
 
+## VirtualBox
+
+See [Virtual Box](https://www.virtualbox.org/) for download and installation instructions.
+
 ### Vagrant
 
 * [Download vagrant](https://www.vagrantup.com/downloads) and follow the installer's instructions.
