@@ -25,8 +25,8 @@ chmod +x /vagrant_work/join.sh
 kubeadm token create --print-join-command > /vagrant_work/join.sh
 
 echo "Creating load-balancing via MetalLB..."
-kubectl create -f https://raw.githubusercontent.com/metallb/metallb/v0.10.2/manifests/namespace.yaml
-kubectl create -f https://raw.githubusercontent.com/metallb/metallb/v0.10.2/manifests/metallb.yaml
+kubectl create -f https://raw.githubusercontent.com/metallb/metallb/v0.11.0/manifests/namespace.yaml
+kubectl create -f https://raw.githubusercontent.com/metallb/metallb/v0.11.0/manifests/metallb.yaml
 cat <<EOF > /tmp/metallb-config.yaml
 apiVersion: v1
 kind: ConfigMap
